@@ -1,5 +1,6 @@
 <?php
 
+/** @deprecated use a dependency injection container instead */
 trait SingletonTrait
 {
     /**

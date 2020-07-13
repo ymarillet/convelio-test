@@ -3,8 +3,11 @@
 class User
 {
     public $id;
+
     public $firstname;
+
     public $lastname;
+
     public $email;
 
     public function __construct($id, $firstname, $lastname, $email)

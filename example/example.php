@@ -34,7 +34,7 @@ $templateManager = new TemplateManager();
 $message = $templateManager->getTemplateComputed(
     $template,
     [
-        'quote' => new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date())
+        'quote' => new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date()),
     ]
 );
 

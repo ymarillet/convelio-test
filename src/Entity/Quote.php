@@ -3,8 +3,11 @@
 class Quote
 {
     public $id;
+
     public $siteId;
+
     public $destinationId;
+
     public $dateQuoted;
 
     public function __construct($id, $siteId, $destinationId, $dateQuoted)
@@ -22,6 +25,6 @@ class Quote
 
     public static function renderText(Quote $quote)
     {
-        return (string) $quote->id;
+        return (string)$quote->id;
     }
 }

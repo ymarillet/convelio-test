@@ -3,6 +3,7 @@
 class Site
 {
     public $id;
+
     public $url;
 
     public function __construct($id, $url)

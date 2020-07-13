@@ -2,6 +2,9 @@
 
 class TemplateManager
 {
+    /**
+     * @return Template
+     */
     public function getTemplateComputed(Template $tpl, array $data)
     {
         if (!$tpl) {
