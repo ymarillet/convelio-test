@@ -40,15 +40,52 @@ class QuoteReplacer implements Replacer
         if (null === $quote) {
             return $this->nextReplacer->replace($text, $context);
         }
-        
-        $quoteFromRepository = $this->quoteRepository->getById($quote->id);
-        $usefulObject = $this->siteRepository->getById($quote->siteId);
-        $destinationOfQuote = $this->destinationRepository->getById($quote->destinationId);
 
+        // this is questionable ... why would we need to get another Quote from a repository since we already got one
+        // in the context ? Maybe they should not be the same class objects. @see with the team
+        $quoteFromRepository = $this->quoteRepository->getById($quote->id);
+
+        $this->replaceSummary($text, $quoteFromRepository);
+        $this->replaceDestination($text, $quote, $quoteFromRepository);
+
+        return $this->nextReplacer->replace($text, $context);
+    }
+
+    private function replaceDestination(&$text, Quote $quote, Quote $quoteFromRepository)
+    {
+        $destination = $this->destinationRepository->getById($quote->destinationId);
+
+        if (false !== strpos($text, '[quote:destination_name]')) {
+            $text = str_replace(
+                '[quote:destination_name]',
+                $destination->countryName,
+                $text
+            );
+        }
+
+        if (false !== strpos($text, '[quote:destination_link]')) {
+            $site = $this->siteRepository->getById($quote->siteId);
+
+            $text = str_replace(
+                '[quote:destination_link]',
+                $site->url . '/' . $destination->countryName . '/quote/' . $quoteFromRepository->id,
+                $text
+            );
+        }
+    }
+
+    /**
+     * @param string $text
+     * @param Quote $quote
+     *
+     * @return void
+     */
+    private function replaceSummary(&$text, Quote $quote)
+    {
         if (false !== strpos($text, '[quote:summary_html]')) {
             $text = str_replace(
                 '[quote:summary_html]',
-                Quote::renderHtml($quoteFromRepository),
+                Quote::renderHtml($quote),
                 $text
             );
         }
@@ -56,30 +93,9 @@ class QuoteReplacer implements Replacer
         if (false !== strpos($text, '[quote:summary]')) {
             $text = str_replace(
                 '[quote:summary]',
-                Quote::renderText($quoteFromRepository),
+                Quote::renderText($quote),
                 $text
             );
         }
-
-        if (false !== strpos($text, '[quote:destination_name]')) {
-            $text = str_replace(
-                '[quote:destination_name]',
-                $destinationOfQuote->countryName,
-                $text
-            );
-        }
-
-        if (false !== strpos($text, '[quote:destination_link]')) {
-            $destination = DestinationRepository::getInstance()->getById($quote->destinationId);
-            $text = str_replace(
-                '[quote:destination_link]',
-                $usefulObject->url . '/' . $destination->countryName . '/quote/' . $quoteFromRepository->id,
-                $text
-            );
-        } else {
-            $text = str_replace('[quote:destination_link]', '', $text);
-        }
-
-        return $this->nextReplacer->replace($text, $context);
     }
 }
