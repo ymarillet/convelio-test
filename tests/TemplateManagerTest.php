@@ -8,6 +8,9 @@ use App\Entity\Template;
 use App\Repository\DestinationRepository;
 use App\Repository\QuoteRepository;
 use App\Repository\SiteRepository;
+use App\Template\TextReplacement\NothingReplacer;
+use App\Template\TextReplacement\QuoteReplacer;
+use App\Template\TextReplacement\UserReplacer;
 use App\TemplateManager;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -53,12 +56,17 @@ Bien cordialement,
 
 L'équipe Convelio.com
 ");
-        // @todo replace real instances by mocks since it's a unit test
+        // @todo replace real instances by mocks since it's a unit test + add unit tests for all classes independently and/or functional test
         $templateManager = new TemplateManager(
-            ApplicationContext::getInstance(),
-            QuoteRepository::getInstance(),
-            SiteRepository::getInstance(),
-            DestinationRepository::getInstance()
+            new UserReplacer(
+                ApplicationContext::getInstance(),
+                new QuoteReplacer(
+                    QuoteRepository::getInstance(),
+                    SiteRepository::getInstance(),
+                    DestinationRepository::getInstance(),
+                    new NothingReplacer()
+                )
+            )
         );
 
         $message = $templateManager->getTemplateComputed(
