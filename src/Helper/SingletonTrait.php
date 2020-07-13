@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helper;
+
 /** @deprecated use a dependency injection container instead */
 trait SingletonTrait
 {

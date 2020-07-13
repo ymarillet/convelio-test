@@ -12,7 +12,11 @@ example: ## run the example provided by Convelio
 example:
 	@$(MAKE) --no-print-directory app "php example/example.php"
 
-.PHONY: example
+test: ## run tests
+test:
+	@$(MAKE) --no-print-directory app "vendor/bin/phpunit"
+
+.PHONY: example test
 
 ##
 ## Docker-specific actions

@@ -1,5 +1,12 @@
 <?php
 
+namespace App\Repository;
+
+use App\Entity\Quote;
+use App\Helper\SingletonTrait;
+use DateTime;
+use Faker;
+
 class QuoteRepository implements Repository
 {
     use SingletonTrait;
