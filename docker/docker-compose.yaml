@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  convelio-test:
+    restart: 'no'
+    image: php:fpm
+    user: "$UID:$GID"
+    working_dir: /app
+    volumes:
+    - ../:/app:rw
+    - /etc/passwd:/etc/passwd
+    - /etc/groups:/etc/groups
